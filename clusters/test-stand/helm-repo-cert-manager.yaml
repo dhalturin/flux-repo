@@ -22,5 +22,5 @@ spec:
       version: '*' # only for test stand
   interval: 1m0s
   values:
-    crd:
+    crds:
       enabled: true
