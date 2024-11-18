@@ -6,8 +6,8 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
-  namespace: ingress-nginx
+  name: nginx
+  namespace: default
 spec:
   selector:
     matchLabels:
