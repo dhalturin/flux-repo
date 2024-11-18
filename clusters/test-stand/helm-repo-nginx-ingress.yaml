@@ -21,13 +21,13 @@ spec:
         name: ingress-nginx
       version: '*' # only for test stand
   interval: 1m0s
-  values:
-    controller:
-      hostNetwork: true
-      hostPort:
-        enabled: true
-        ports:
-          http: 80
-          https: 443
-      service:
-        type: ClusterIP
+  # values:
+  #   controller:
+  #     hostNetwork: true
+  #     hostPort:
+  #       enabled: true
+  #       ports:
+  #         http: 80
+  #         https: 443
+  #     service:
+  #       type: ClusterIP
