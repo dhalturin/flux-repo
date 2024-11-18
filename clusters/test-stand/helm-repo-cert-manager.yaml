@@ -21,3 +21,6 @@ spec:
         name: jetstack
       version: '*' # only for test stand
   interval: 1m0s
+  values:
+    crd:
+      enabled: true
