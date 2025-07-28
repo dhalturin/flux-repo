@@ -11,10 +11,10 @@ spec:
   path: ./infra/observability
   wait: true
   prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
   decryption:
     provider: sops
     secretRef:
       name: sops-gpg
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
