@@ -1,11 +1,17 @@
-serviceAccount:
-  create: true
-rbac:
-  create: true
-backend:
-  type: forward
-input:
-  tail:
+loki:
+  auth_enabled: false
+singleBinary:
+  replicas: 1
+  persistence:
     enabled: true
-    path: /var/log/containers/*.log
-    parser: docker
+    size: 10Gi
+    storageClassName: standard
+service:
+  type: ClusterIP
+monitoring:
+  dashboards:
+    enabled: false
+  rules:
+    enabled: false
+  serviceMonitor:
+    enabled: false
