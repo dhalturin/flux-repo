@@ -3,6 +3,6 @@ kind: Kustomization
 namespace: monitoring
 bases:
   - "../../base/env"
-  - "../../base/secrets"
+  - "../../base/startup"
 resources:
   - ns.yaml
