@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    version: 1
+  labels:
+    app.kubernetes.io/component: startup-sh
+    app.kubernetes.io/part-of: infra
+    app.kubernetes.io/version: 1
+  name: startup-sh-v1
+data:
+  startup.sh: |
+    #!/usr/bin/env sh
+    set -ex
+    env
