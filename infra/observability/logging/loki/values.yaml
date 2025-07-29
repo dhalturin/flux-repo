@@ -15,4 +15,3 @@ monitoring:
     enabled: false
   serviceMonitor:
     enabled: false
-

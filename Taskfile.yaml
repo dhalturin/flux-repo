@@ -1,0 +1,80 @@
+version: '3'
+
+env:
+  KEY_NAME: cluster.local
+  KEY_COMMENT: flux secrets
+  KUBECONFIG: "{{ .HOME }}/.kube/test-stand.yaml"
+  KUBENODES:
+    - 192.168.0.240
+    - 192.168.0.241
+    - 192.168.0.242
+    - 192.168.0.243
+    - 192.168.0.244
+
+tasks:
+  init:
+    desc: initialize k0s cluster
+    cmds:
+      - >-
+        k0sctl init
+        --cluster-name test-stand
+        {{ range $item := .KUBENODES }}
+        root@{{ $item }}
+        {{ end }} | tee /tmp/k0sctl.yaml
+      - k0sctl apply --config /tmp/k0sctl.yaml
+      - k0sctl kubeconfig --config /tmp/k0sctl.yaml | tee {{ .KUBECONFIG }}
+  bootstrap:
+    desc: bootstrap k0s cluster
+    cmds:
+      - >-
+        flux bootstrap github
+        --owner=$GITHUB_USER
+        --repository=flux-repo
+        --branch=master
+        --path=./clusters/test-stand
+        --personal
+  sops-generate:
+    desc: generate sops secrets
+    cmds:
+      - |-
+        echo gpg --batch --full-generate-key <<EOF
+        %no-protection
+        Key-Type: 1
+        Key-Length: 4096
+        Subkey-Type: 1
+        Subkey-Length: 4096
+        Expire-Date: 0
+        Name-Comment: ${KEY_COMMENT}
+        Name-Real: ${KEY_NAME}
+        EOF
+  sops-export:
+    desc: export sops secrets
+    vars:
+      KEY_FP:
+        sh: gpg --list-secret-keys "flux secrets" | awk '/^sec / {getline; print $1}'
+    cmds:
+      - |-
+        cat <<EOF > .sops.yaml
+        creation_rules:
+          - path_regex: .*.yaml
+            encrypted_regex: ^(data)$
+            pgp: {{ .KEY_FP }}
+        EOF
+      - gpg --export --armor {{ .KEY_FP }} | tee .sops.pub.asc
+      - >-
+        gpg --export-secret-keys --armor {{ .KEY_FP }} |
+        kubectl -n flux-system create secret generic sops-gpg
+        --from-file=sops.asc=/dev/stdin
+  secret-test:
+    desc: test sops secret
+    cmds:
+      - >-
+        kubectl create secret generic basic-auth
+        --from-literal=user=admin
+        --from-literal=pass=qwerty
+        --dry-run=client
+        -o yaml |
+        sops encrypt
+        --output-type yaml
+        --filename-override secret.yaml
+        --output infra/base/env/secret.yaml
