@@ -5,37 +5,46 @@ env:
   KEY_COMMENT: flux secrets
   KUBECONFIG: "{{ .HOME }}/.kube/test-stand.yaml"
   KUBENODES:
-    - 192.168.0.240
-    - 192.168.0.241
-    - 192.168.0.242
-    - 192.168.0.243
-    - 192.168.0.244
-    - 192.168.0.245;storage=large:NoSchedule,qqqq=dddddd
+    - kube00;192.168.0.240
+    - kube01;192.168.0.241
+    - kube02;192.168.0.242
+    - kube03;192.168.0.243
+    - kube04;192.168.0.244
+    - kube05;192.168.0.245;storage=large:NoSchedule
+    # - kube05;192.168.0.245;storage=large:NoSchedule,example-key=value:NoExecute
 
 tasks:
-  init:
+  cluster-init:
     desc: initialize k0s cluster
     cmds:
-      # - >-
-      #   k0sctl init
-      #   --cluster-name test-stand
-      #   {{ range $item := .KUBENODES }}
-      #   root@{{ $item | splitList ";" | first }}
-      #   {{ end }} | tee /tmp/k0sctl.yaml
-      # - k0sctl apply --config /tmp/k0sctl.yaml
-      # - k0sctl kubeconfig --config /tmp/k0sctl.yaml | tee {{ .KUBECONFIG }}
-      # - kubectl taint nodes kube05 storage=large:NoSchedule
       - >-
-        {{ $taints := dict }}
-        {{- range $item := .KUBENODES }}
-          {{- $items := ($item | splitList ";") }}
-          {{- if gt ($items | len) 1 -}}
-            kubectl taint nodes  {{ $items | first }}
-            {{- range $idx, $taint := $items | rest | first | splitList "," }}
-              {{ $taint }} 
-            {{ end }}
+        k0sctl init
+        --cluster-name test-stand
+        {{ range $item := .KUBENODES }}
+        root@{{ (split ";" $item)._1 }}
+        {{ end }} | tee /tmp/k0sctl.yaml
+      - k0sctl apply --config /tmp/k0sctl.yaml
+      - k0sctl kubeconfig --config /tmp/k0sctl.yaml | tee {{ .KUBECONFIG }}
+      - for: { var: KUBENODES }
+        cmd: >-
+          {{- $items := (split ";" .ITEM) }}
+          {{- if gt ($items | len) 2 -}}
+            kubectl taint nodes --overwrite {{ $items._0 }} {{ ($items._2 | splitList "," | join " ") }}
           {{- end -}}
-        {{- end }}
+
+  cluster-cleanup:
+    desc: cleanup k0s cluster
+    cmds:
+      - k0sctl reset --force --config /tmp/k0sctl.yaml
+      - for: { var: KUBENODES }
+        cmd: |
+          cat <<EOF | ssh root@{{ (split ";" .ITEM)._1 }}
+          k0s stop
+          k0s reset
+          find / -name "*kube*" -o -name "*k0s*" -exec rm -rfv {} +;
+          reboot
+          EOF
+        ignore_error: true
 
   bootstrap:
     desc: bootstrap k0s cluster
@@ -47,11 +56,12 @@ tasks:
         --branch=master
         --path=./clusters/test-stand
         --personal
+
   sops-generate:
     desc: generate sops secrets
     cmds:
       - |-
-        echo gpg --batch --full-generate-key <<EOF
+        gpg --batch --full-generate-key <<EOF
         %no-protection
         Key-Type: 1
         Key-Length: 4096
@@ -61,6 +71,7 @@ tasks:
         Name-Comment: ${KEY_COMMENT}
         Name-Real: ${KEY_NAME}
         EOF
+
   sops-export:
     desc: export sops secrets
     vars:
@@ -79,6 +90,7 @@ tasks:
         gpg --export-secret-keys --armor {{ .KEY_FP }} |
         kubectl -n flux-system create secret generic sops-gpg
         --from-file=sops.asc=/dev/stdin
+
   secret-test:
     desc: test sops secret
     cmds:
