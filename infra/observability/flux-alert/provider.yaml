@@ -6,6 +6,6 @@ metadata:
 spec:
   type: telegram
   address: https://api.telegram.org
-  channel: "@fluxcd"
+  channel: -4804068770
   secretRef:
     name: telegram-token
