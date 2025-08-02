@@ -1,0 +1,11 @@
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: telegram
+  namespace: default
+spec:
+  type: telegram
+  address: https://api.telegram.org
+  channel: "@fluxcd"
+  secretRef:
+    name: telegram-token
