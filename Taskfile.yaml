@@ -10,19 +10,33 @@ env:
     - 192.168.0.242
     - 192.168.0.243
     - 192.168.0.244
+    - 192.168.0.245;storage=large:NoSchedule,qqqq=dddddd
 
 tasks:
   init:
     desc: initialize k0s cluster
     cmds:
+      # - >-
+      #   k0sctl init
+      #   --cluster-name test-stand
+      #   {{ range $item := .KUBENODES }}
+      #   root@{{ $item | splitList ";" | first }}
+      #   {{ end }} | tee /tmp/k0sctl.yaml
+      # - k0sctl apply --config /tmp/k0sctl.yaml
+      # - k0sctl kubeconfig --config /tmp/k0sctl.yaml | tee {{ .KUBECONFIG }}
+      # - kubectl taint nodes kube05 storage=large:NoSchedule
       - >-
-        k0sctl init
-        --cluster-name test-stand
-        {{ range $item := .KUBENODES }}
-        root@{{ $item }}
-        {{ end }} | tee /tmp/k0sctl.yaml
-      - k0sctl apply --config /tmp/k0sctl.yaml
-      - k0sctl kubeconfig --config /tmp/k0sctl.yaml | tee {{ .KUBECONFIG }}
+        {{ $taints := dict }}
+        {{- range $item := .KUBENODES }}
+          {{- $items := ($item | splitList ";") }}
+          {{- if gt ($items | len) 1 -}}
+            kubectl taint nodes  {{ $items | first }}
+            {{- range $idx, $taint := $items | rest | first | splitList "," }}
+              {{ $taint }} 
+            {{ end }}
+          {{- end -}}
+        {{- end }}
+
   bootstrap:
     desc: bootstrap k0s cluster
     cmds:
