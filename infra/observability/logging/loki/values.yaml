@@ -3,4 +3,4 @@ loki:
 promtail:
   enabled: true
 grafana:
-  enabled: falsed
+  enabled: true
