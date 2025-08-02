@@ -1,17 +1,6 @@
 loki:
-  auth_enabled: false
-singleBinary:
-  replicas: 1
-  persistence:
-    enabled: true
-    size: 10Gi
-    storageClassName: standard
-service:
-  type: ClusterIP
-monitoring:
-  dashboards:
-    enabled: false
-  rules:
-    enabled: false
-  serviceMonitor:
-    enabled: false
+  enabled: true
+promtail:
+  enabled: true
+grafana:
+  enabled: true
