@@ -4,3 +4,5 @@ metadata:
   name: apps-test
   annotations:
     sidecar.istio.io/inject: "true"
+  labels:
+    istio-injection: enabled
