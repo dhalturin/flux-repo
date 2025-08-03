@@ -5,7 +5,9 @@ loki:
       operator: "Equal"
       value: "large"
       effect: "NoSchedule"
+
 promtail:
   enabled: true
+
 grafana:
   enabled: true
