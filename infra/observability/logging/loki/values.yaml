@@ -1,13 +1,14 @@
 loki:
   enabled: true
   tolerations:
-    - key: "storage"
-      operator: "Equal"
-      value: "large"
-      effect: "NoSchedule"
+    - key: storage
+      operator: Equal
+      value: large
 
 promtail:
   enabled: true
+  tolerations:
+    - operator: Exists
 
 grafana:
   enabled: true
