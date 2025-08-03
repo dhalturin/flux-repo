@@ -9,4 +9,3 @@ spec:
   channel: "8278976"
   secretRef:
     name: telegram-token
-    key: token
