@@ -7,6 +7,7 @@ spec:
   interval: 5m0s
   path: ./apps
   dependsOn:
+    - name: infra-istio-gateway
     - name: infra-ns
   prune: true
   sourceRef:
