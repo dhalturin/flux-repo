@@ -1,0 +1,3 @@
+operatorNamespace: istio-operator
+watchedNamespaces:
+  - istio-system

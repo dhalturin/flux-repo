@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-operator
+  labels:
+    app.kubernetes.io/part-of: istio
+    app.kubernetes.io/component: istio
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-system
+  labels:
+    app.kubernetes.io/part-of: istio
+    app.kubernetes.io/component: istio
