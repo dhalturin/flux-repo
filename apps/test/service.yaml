@@ -39,6 +39,6 @@ spec:
             prefix: /
       route:
         - destination:
-            host: httpbin.default.svc.cluster.local
+            host: httpbin.apps-test.svc.cluster.local
             port:
               number: 80
