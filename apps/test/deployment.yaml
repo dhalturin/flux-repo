@@ -13,8 +13,6 @@ spec:
     metadata:
       labels:
         app: httpbin
-      annotations:
-        sidecar.istio.io/inject: "true"
     spec:
       containers:
         - name: httpbin
