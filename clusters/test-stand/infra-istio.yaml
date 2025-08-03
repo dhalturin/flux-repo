@@ -6,8 +6,8 @@ metadata:
 spec:
   interval: 5m0s
   path: ./infra/istio/system
-  dependsOn:
-    - name: infra-istio-operator
+  # dependsOn:
+  #   - name: infra-istio-operator
   prune: true
   sourceRef:
     kind: GitRepository
