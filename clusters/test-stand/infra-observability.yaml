@@ -6,7 +6,6 @@ metadata:
 spec:
   interval: 5m0s
   dependsOn:
-    - name: infra-src
     - name: infra-ns
   path: ./infra/observability
   wait: true

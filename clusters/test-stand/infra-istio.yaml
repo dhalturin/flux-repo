@@ -6,6 +6,8 @@ metadata:
 spec:
   interval: 5m0s
   path: ./infra/istio
+  dependsOn:
+    - name: infra-ns
   prune: true
   sourceRef:
     kind: GitRepository

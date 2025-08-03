@@ -6,6 +6,8 @@ metadata:
 spec:
   interval: 5m0s
   path: ./infra/ns
+  dependsOn:
+    - name: infra-src
   prune: true
   sourceRef:
     kind: GitRepository
