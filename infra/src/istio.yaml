@@ -4,4 +4,4 @@ metadata:
   name: istio
 spec:
   interval: 1h
-  url: httpshttps://stevehipwell.github.io/helm-charts/
+  url: https://stevehipwell.github.io/helm-charts/
