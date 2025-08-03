@@ -2,7 +2,6 @@ apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: gateway
-  namespace: default
 spec:
   selector:
     istio: ingressgateway
@@ -13,3 +12,22 @@ spec:
       protocol: HTTP
     hosts:
     - "*"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: httpbin
+spec:
+  hosts:
+    - httpbin.jzzi.ru
+  gateways:
+    - gateway
+  http:
+    - match:
+        - uri:
+            prefix: "/"
+      route:
+        - destination:
+            host: httpbin.default.svc.cluster.local
+            port:
+              number: 80
