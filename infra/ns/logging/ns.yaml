@@ -5,4 +5,4 @@ metadata:
   labels:
     app.kubernetes.io/part-of: logging
     app.kubernetes.io/component: namespace
-    istio-injection: enabled
+    # istio-injection: enabled
