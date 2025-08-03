@@ -7,8 +7,8 @@ spec:
   profile: default
   components:
     ingressGateways:
-    - name: istio-ingressgateway
-      enabled: true
+      - name: istio-ingressgateway
+        enabled: true
   values:
     global:
       istioNamespace: istio-system
