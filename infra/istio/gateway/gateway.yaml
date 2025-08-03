@@ -1,18 +1,18 @@
-# apiVersion: networking.istio.io/v1beta1
-# kind: Gateway
-# metadata:
-#   name: httpbin-gateway
-# spec:
-#   selector:
-#     istio: ingressgateway
-#   servers:
-#     - port:
-#         number: 10080
-#         name: http
-#         protocol: HTTP
-#       hosts:
-#         - "*"
-# ---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: gateway-main
+spec:
+  selector:
+    istio: gateway-main
+  servers:
+    - port:
+        number: 10080
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
