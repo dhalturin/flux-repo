@@ -1,33 +1,33 @@
-apiVersion: networking.istio.io/v1beta1
-kind: Gateway
-metadata:
-  name: httpbin-gateway
-spec:
-  selector:
-    istio: ingressgateway
-  servers:
-    - port:
-        number: 10080
-        name: http
-        protocol: HTTP
-      hosts:
-        - "*"
----
-apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
-metadata:
-  name: httpbin
-spec:
-  hosts:
-    - "*"
-  gateways:
-    - httpbin-gateway
-  http:
-    - match:
-        - uri:
-            prefix: /
-      route:
-        - destination:
-            host: httpbin.apps-test.svc.cluster.local
-            port:
-              number: 80
+# apiVersion: networking.istio.io/v1beta1
+# kind: Gateway
+# metadata:
+#   name: httpbin-gateway
+# spec:
+#   selector:
+#     istio: ingressgateway
+#   servers:
+#     - port:
+#         number: 10080
+#         name: http
+#         protocol: HTTP
+#       hosts:
+#         - "*"
+# ---
+# apiVersion: networking.istio.io/v1beta1
+# kind: VirtualService
+# metadata:
+#   name: httpbin
+# spec:
+#   hosts:
+#     - "*"
+#   gateways:
+#     - httpbin-gateway
+#   http:
+#     - match:
+#         - uri:
+#             prefix: /
+#       route:
+#         - destination:
+#             host: httpbin.apps-test.svc.cluster.local
+#             port:
+#               number: 80
