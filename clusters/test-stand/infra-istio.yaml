@@ -15,3 +15,21 @@ spec:
   postBuild:
     substitute:
       istio_version: "1.26.3"
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infra-istio-system
+  namespace: flux-system
+spec:
+  interval: 5m0s
+  path: ./infra/istio/gateway
+  dependsOn:
+    - name: infra-istio-system
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  postBuild:
+    substitute:
+      istio_version: "1.26.3"
