@@ -1,13 +1,13 @@
-apiVersion: networking.istio.io/v1alpha3
-kind: ServiceEntry
-metadata:
-  name: loki-external
-  namespace: logging
-spec:
-  hosts:
-  - loki-stack.logging.svc.cluster.local
-  ports:
-  - number: 3100
-    name: http
-    protocol: HTTP
-  resolution: DNS
+# apiVersion: networking.istio.io/v1alpha3
+# kind: ServiceEntry
+# metadata:
+#   name: loki-external
+#   namespace: logging
+# spec:
+#   hosts:
+#   - loki-stack.logging.svc.cluster.local
+#   ports:
+#   - number: 3100
+#     name: http
+#     protocol: HTTP
+#   resolution: DNS
