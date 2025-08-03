@@ -1,21 +1,6 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: infra-istio-operator
-  namespace: flux-system
-spec:
-  interval: 5m0s
-  path: ./infra/istio/operator
-  dependsOn:
-    - name: infra-ns
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
   name: infra-istio-system
   namespace: flux-system
 spec:
@@ -27,3 +12,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+  postBuild:
+    substitute:
+      istio_version: "1.26.3"
