@@ -1,5 +1,10 @@
 loki:
   enabled: true
+  tolerations:
+    - key: "storage"
+      operator: "Equal"
+      value: "large"
+      effect: "NoSchedule"
 promtail:
   enabled: true
 grafana:
