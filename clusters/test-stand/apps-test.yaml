@@ -1,11 +1,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps
+  name: apps-test
   namespace: flux-system
 spec:
   interval: 5m0s
-  path: ./apps
+  path: ./apps/test
   dependsOn:
     - name: infra-istio-gateway
     - name: infra-ns

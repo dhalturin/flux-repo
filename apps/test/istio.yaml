@@ -1,7 +1,7 @@
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
-  name: gateway-main-qqq
+  name: httpbin
 spec:
   selector:
     istio: gateway-main
@@ -21,7 +21,7 @@ spec:
   hosts:
     - "*"
   gateways:
-    - gateway-main-qqq
+    - httpbin
   http:
     - match:
         - uri:
