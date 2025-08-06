@@ -4,7 +4,7 @@ metadata:
   name: gateway-main-qqq
 spec:
   selector:
-    istio: gateway-main-qqq
+    istio: gateway-main
   servers:
     - port:
         number: 10080
